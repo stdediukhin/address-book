@@ -2,6 +2,7 @@ package com.epam.addressbook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +20,10 @@ public class AddressBookApplication {
 
     @Bean
     public AccommodationRepository accommodationRepository() {
-        return new InMemoryAccommodationRepository();
+        final MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
+
+        return new JdbcAccommodationRepository(dataSource);
     }
 
     @Bean

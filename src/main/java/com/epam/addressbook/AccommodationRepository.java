@@ -9,5 +9,5 @@ public interface AccommodationRepository {
     Optional<Accommodation> getById(final long accommodationId);
     Optional<List<Accommodation>> findAll();
     Optional<Accommodation> update(final long id, final Accommodation toUpdate);
-    Optional<Accommodation> delete(final long id);
+    void delete(final long id);
 }

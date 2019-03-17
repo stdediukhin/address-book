@@ -37,9 +37,8 @@ public class InMemoryAccommodationRepository implements AccommodationRepository 
         return Optional.empty();
     }
 
-    public Optional<Accommodation> delete(final long id) {
+    public void delete(final long id) {
         repo.remove(id);
-        return Optional.empty();
     }
 
 }
