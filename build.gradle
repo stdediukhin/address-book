@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    springBootVersion = '2.1.4.RELEASE'
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+}
