@@ -1,5 +1,7 @@
 package com.epam.addressbook;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
@@ -13,16 +15,22 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class AccommodationControllerTest {
     private AccommodationRepository accommodationRepository;
+    private MeterRegistry meterRegistry;
     private AccommodationController subject;
 
     @Before
     public void setUp() {
         accommodationRepository = mock(AccommodationRepository.class);
-        subject = new AccommodationController(accommodationRepository);
+        meterRegistry = mock(MeterRegistry.class);
+        doReturn(mock(Number.class)).when(meterRegistry).gauge(any(), any());
+        doReturn(mock(Counter.class)).when(meterRegistry).counter(any());
+        subject = new AccommodationController(accommodationRepository, meterRegistry);
     }
 
     @Test
@@ -36,6 +44,12 @@ public class AccommodationControllerTest {
         doReturn(Optional.of(expectedResult))
                 .when(accommodationRepository)
                 .create(any(Accommodation.class));
+
+        List<Accommodation> expected = asList(
+            new Accommodation(1L, 123L, 456L, LocalDate.parse("2018-10-10"), true),
+            new Accommodation(2L, 789L, 321L, LocalDate.parse("2018-01-01"), false)
+        );
+        doReturn(Optional.of(expected)).when(accommodationRepository).findAll();
 
 
         ResponseEntity response = subject.create(accommodationToCreate);
@@ -135,6 +149,11 @@ public class AccommodationControllerTest {
     public void delete_returnsNoContent() {
         long accommodationId = 1L;
 
+        List<Accommodation> expected = asList(
+            new Accommodation(1L, 123L, 456L, LocalDate.parse("2018-10-10"), true),
+            new Accommodation(2L, 789L, 321L, LocalDate.parse("2018-01-01"), false)
+        );
+        doReturn(Optional.of(expected)).when(accommodationRepository).findAll();
 
         ResponseEntity<Accommodation> response = subject.delete(accommodationId);
 
