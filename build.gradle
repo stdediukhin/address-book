@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id 'org.flywaydb.flyway' version '5.2.4'
 }
 
 repositories {
@@ -15,7 +16,11 @@ ext {
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDatatypeJsr310Version")
+    implementation "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
+
+    implementation 'mysql:mysql-connector-java:8.0.11'
+
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDatatypeJsr310Version"
 
     compileOnly 'org.projectlombok:lombok:1.18.6'
     annotationProcessor 'org.projectlombok:lombok:1.18.6'
@@ -23,10 +28,45 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
 
+def devDbUrl = "jdbc:mysql://localhost:3306/ADDRESS_BOOK_DEV?user=address-book&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 bootRun.environment([
-        "WELCOME_MESSAGE": "Hello from gradle"
+        "WELCOME_MESSAGE": "Hello from gradle",
+        "SPRING_DATASOURCE_URL": devDbUrl
 ])
 
+def testDbUrl = "jdbc:mysql://localhost:3306/ADDRESS_BOOK_TEST?user=address-book&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 test.environment([
+        "SPRING_DATASOURCE_URL": testDbUrl,
         "WELCOME_MESSAGE": "Hello from test"
 ])
+
+flyway {
+    url = devDbUrl
+    user = "address-book"
+    password = ""
+    locations = ["filesystem:databases/address_book/migrations"]
+}
+
+task testClean(type: FlywayCleanTask) {
+    url = testDbUrl
+}
+
+task testInfo(type: FlywayInfoTask) {
+    url = testDbUrl
+}
+
+task testMigrate(type: FlywayMigrateTask) {
+    url = testDbUrl
+}
+
+task devClean(type: FlywayCleanTask) {
+    url = devDbUrl
+}
+
+task devInfo(type: FlywayInfoTask) {
+    url = devDbUrl
+}
+
+task devMigrate(type: FlywayMigrateTask) {
+    url = devDbUrl
+}
