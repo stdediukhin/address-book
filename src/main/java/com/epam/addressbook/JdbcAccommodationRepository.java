@@ -1,12 +1,12 @@
 package com.epam.addressbook;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -18,7 +18,7 @@ public class JdbcAccommodationRepository implements AccommodationRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcAccommodationRepository(final MysqlDataSource dataSource) {
+    public JdbcAccommodationRepository(final DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 

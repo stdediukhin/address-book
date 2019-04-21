@@ -2,9 +2,7 @@ package com.epam.addressbook;
 
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AccommodationHealthIndicator implements HealthIndicator {
 
     private static final int MAX_TIME_ENTRIES = 5;
