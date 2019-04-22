@@ -1,5 +1,8 @@
-package com.epam.addressbook;
+package com.epam.addressbook.configuration;
 
+import com.epam.addressbook.actuator.AccommodationHealthIndicator;
+import com.epam.addressbook.repository.AccommodationRepository;
+import com.epam.addressbook.repository.JdbcAccommodationRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mysql.cj.jdbc.MysqlDataSource;

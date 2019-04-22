@@ -1,5 +1,6 @@
-package com.epam.addressbook;
+package com.epam.addressbook.repository;
 
+import com.epam.addressbook.model.Accommodation;
 import org.junit.Test;
 
 import java.time.LocalDate;

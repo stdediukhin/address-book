@@ -1,5 +1,6 @@
-package com.epam.addressbook;
+package com.epam.addressbook.actuator;
 
+import com.epam.addressbook.repository.AccommodationRepository;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 

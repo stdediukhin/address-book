@@ -26,6 +26,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
 
     implementation 'mysql:mysql-connector-java:8.0.11'
 
@@ -39,18 +40,20 @@ dependencies {
 
 def devDbUrl = "jdbc:mysql://localhost:3306/ADDRESS_BOOK_DEV?user=root&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 bootRun.environment([
-        "SPRING_PROFILES_ACTIVE": "dev",
-        "SPRING_DATASOURCE_URL": devDbUrl,
-        "WELCOME_MESSAGE": "Hello from gradle",
-        "MANAGEMENT_SECURITY_ENABLED": false
+        "SPRING_PROFILES_ACTIVE"     : "dev",
+        "SPRING_DATASOURCE_URL"      : devDbUrl,
+        "WELCOME_MESSAGE"            : "Hello from gradle",
+        "MANAGEMENT_SECURITY_ENABLED": false,
+        "HTTPS_DISABLED"             : true
 ])
 
 def testDbUrl = "jdbc:mysql://localhost:3306/ADDRESS_BOOK_TEST?user=root&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 test.environment([
-        "SPRING_PROFILES_ACTIVE": "test",
-        "SPRING_DATASOURCE_URL": testDbUrl,
-        "WELCOME_MESSAGE": "Hello from test",
-        "MANAGEMENT_SECURITY_ENABLED": false
+        "SPRING_PROFILES_ACTIVE"     : "test",
+        "SPRING_DATASOURCE_URL"      : testDbUrl,
+        "WELCOME_MESSAGE"            : "Hello from test",
+        "MANAGEMENT_SECURITY_ENABLED": false,
+        "HTTPS_DISABLED"             : true
 ])
 
 flyway {

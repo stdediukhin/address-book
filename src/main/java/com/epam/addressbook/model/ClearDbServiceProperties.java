@@ -1,4 +1,4 @@
-package com.epam.addressbook;
+package com.epam.addressbook.model;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

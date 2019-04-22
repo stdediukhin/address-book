@@ -1,4 +1,4 @@
-package com.epam.addressbook;
+package com.epam.addressbook.controller;
 
 import org.junit.Test;
 

@@ -1,4 +1,6 @@
-package com.epam.addressbook;
+package com.epam.addressbook.repository;
+
+import com.epam.addressbook.model.Accommodation;
 
 import java.util.ArrayList;
 import java.util.HashMap;

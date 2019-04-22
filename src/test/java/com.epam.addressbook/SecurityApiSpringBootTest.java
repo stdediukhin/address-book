@@ -30,7 +30,7 @@ public class SecurityApiSpringBootTest {
     public void setUp() {
         RestTemplateBuilder builder = new RestTemplateBuilder()
                 .rootUri("http://localhost:" + port)
-                .basicAuthorization("user", "password");
+                .basicAuthentication("user", "password");
 
         authorizedRestTemplate = new TestRestTemplate(builder);
     }

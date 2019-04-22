@@ -1,13 +1,16 @@
-package com.epam.addressbook;
+package com.epam.addressbook.controller;
 
+import com.epam.addressbook.AddressBookApplication;
+import com.epam.addressbook.model.Accommodation;
 import com.jayway.jsonpath.DocumentContext;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -26,7 +29,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(classes = AddressBookApplication.class, webEnvironment = RANDOM_PORT)
 public class AccommodationApiSpringBootTest {
 
-    @Autowired
+    @LocalServerPort
+    private String port;
     private TestRestTemplate restTemplate;
 
     private final long addressId = 123L;
@@ -43,12 +47,17 @@ public class AccommodationApiSpringBootTest {
         jdbcTemplate.execute("TRUNCATE ACCOMMODATION");
 
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
+        RestTemplateBuilder builder = new RestTemplateBuilder()
+            .rootUri("http://localhost:" + port)
+            .basicAuthentication("user", "password");
+
+        restTemplate = new TestRestTemplate(builder);
     }
 
     @Test
     public void create_returnsCreatedEntityAndHttpStatusIsCreated() {
         ResponseEntity<String> createResponse = restTemplate.postForEntity("/accommodations", accommodation, String.class);
-
 
         assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -64,9 +73,7 @@ public class AccommodationApiSpringBootTest {
     public void getById_returnsFoundEntityAndHttpStatusIsOk() {
         Accommodation accommodation = createAndPostAccommodation();
 
-
         ResponseEntity<String> readResponse = restTemplate.getForEntity("/accommodations/" + accommodation.getId(), String.class);
-
 
         assertThat(readResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         DocumentContext readJson = parse(readResponse.getBody());
@@ -82,9 +89,7 @@ public class AccommodationApiSpringBootTest {
         Accommodation firstAccommodation = createAndPostAccommodation();
         Accommodation secondAccommodation = createAndPostAccommodation();
 
-
         ResponseEntity<String> readResponse = restTemplate.getForEntity("/accommodations/", String.class);
-
 
         assertThat(readResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         DocumentContext readJson = parse(readResponse.getBody());
@@ -113,9 +118,7 @@ public class AccommodationApiSpringBootTest {
 
         Accommodation updatedAccommodation = new Accommodation(addressId, personId, LocalDate.parse(dateString), singleOwned);
 
-
         ResponseEntity<String> updateResponse = restTemplate.exchange("/accommodations/" + id, HttpMethod.PUT, new HttpEntity<>(updatedAccommodation, null), String.class);
-
 
         assertThat(updateResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
@@ -131,9 +134,7 @@ public class AccommodationApiSpringBootTest {
     public void delete_returnsNoContent() {
         Long id = createAndPostAccommodation().getId();
 
-
         ResponseEntity<String> deleteResponse = restTemplate.exchange("/accommodations/" + id, HttpMethod.DELETE, null, String.class);
-
 
         assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
@@ -144,9 +145,7 @@ public class AccommodationApiSpringBootTest {
     private Accommodation createAndPostAccommodation() {
         HttpEntity<Accommodation> entity = new HttpEntity<>(accommodation);
 
-
         ResponseEntity<Accommodation> response = restTemplate.exchange("/accommodations", HttpMethod.POST, entity, Accommodation.class);
-
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 

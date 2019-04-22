@@ -1,4 +1,4 @@
-package com.epam.addressbook;
+package com.epam.addressbook.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

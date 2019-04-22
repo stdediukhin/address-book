@@ -1,5 +1,7 @@
-package com.epam.addressbook;
+package com.epam.addressbook.controller;
 
+import com.epam.addressbook.model.Accommodation;
+import com.epam.addressbook.repository.AccommodationRepository;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.Before;
